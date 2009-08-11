@@ -10,6 +10,8 @@
 	NSObject	*realObject;
 }
 
++ (void)forgetPartialMockForObject:(id)anObject;
+
 - (id)initWithObject:(NSObject *)anObject;
 
 - (NSObject *)realObject;

@@ -39,6 +39,10 @@
 	return [[[OCPartialMockObject alloc] initWithObject:anObject] autorelease];
 }
 
++ (void)forgetPartialMockForObject:(NSObject *)anObject
+{
+    [OCPartialMockObject forgetPartialMockForObject:anObject];
+}
 
 + (id)niceMockForClass:(Class)aClass
 {
