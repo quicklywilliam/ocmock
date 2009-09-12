@@ -75,8 +75,11 @@ static NSMutableDictionary *mockTable;
 
 - (void)setupSubclassForObject:(id)anObject
 {
+    static int partialMockCount = 0;
+    partialMockCount++;
+    
 	Class realClass = [anObject class];
-	const char *className = [[NSString stringWithFormat:@"%@-%p", realClass, anObject] cString]; 
+	const char *className = [[NSString stringWithFormat:@"%@-%d", realClass, partialMockCount] cString];
 	NSLog(@"Creating class named %s", className);
 	Class subclass = objc_allocateClassPair(realClass, className, 0);
 	objc_registerClassPair(subclass);
