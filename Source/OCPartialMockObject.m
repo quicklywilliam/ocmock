@@ -56,7 +56,6 @@ static NSMutableDictionary *mockTable;
 {
 	object_setClass(realObject, [self mockedClass]);
 	[realObject release];
-	[[self class] forgetPartialMockForObject:realObject];
 	[super dealloc];
 }
 
