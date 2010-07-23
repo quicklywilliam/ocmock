@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------------
-//  $Id$
+//  $Id: OCMockObjectTests.m 55 2009-10-16 06:42:18Z erik $
 //  Copyright (c) 2004-2008 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
@@ -217,6 +217,36 @@ static NSString *TestNotification = @"TestNotification";
 }
 
 
+- (void)testCanPassMocksAsArguments
+{
+	id mockArg = [OCMockObject mockForClass:[NSString class]];
+	[[mock stub] stringByAppendingString:[OCMArg any]];
+	[mock stringByAppendingString:mockArg];
+}
+
+- (void)testCanStubWithMockArguments
+{
+	id mockArg = [OCMockObject mockForClass:[NSString class]];
+	[[mock stub] stringByAppendingString:mockArg];
+	[mock stringByAppendingString:mockArg];
+}
+
+- (void)testRaisesExceptionWhenStubbedMockArgIsNotUsed
+{
+	id mockArg = [OCMockObject mockForClass:[NSString class]];
+	[[mock stub] stringByAppendingString:mockArg];
+	STAssertThrows([mock stringByAppendingString:@"foo"], @"Should have raised an exception.");
+}
+
+- (void)testRaisesExceptionWhenDifferentMockArgumentIsPassed
+{
+	id expectedArg = [OCMockObject mockForClass:[NSString class]];
+	id otherArg = [OCMockObject mockForClass:[NSString class]];
+	[[mock stub] stringByAppendingString:otherArg];
+	STAssertThrows([mock stringByAppendingString:expectedArg], @"Should have raised an exception.");	
+}
+
+
 // --------------------------------------------------------------------------------------
 //	returning values from stubbed methods
 // --------------------------------------------------------------------------------------
@@ -299,32 +329,20 @@ static NSString *TestNotification = @"TestNotification";
 }
 
 
-- (NSString *)valueForTest
+- (NSString *)valueForString:(NSString *)aString andMask:(NSStringCompareOptions)mask
 {
-	return @"value for test";
+	return [NSString stringWithFormat:@"[%@, %d]", aString, mask];
 }
 
-- (void)testCallsMethodAndReturnsItsReturnValueWhenAskedTo
+- (void)testCallsAlternativeMethodAndPassesOriginalArgumentsAndReturnsValue
 {
-	[[[mock stub] andCall:@selector(valueForTest) onObject:self] lowercaseString];
+	[[[mock stub] andCall:@selector(valueForString:andMask:) onObject:self] commonPrefixWithString:@"FOO" options:NSCaseInsensitiveSearch];
 	
-	STAssertEqualObjects(@"value for test", [mock lowercaseString], @"Should have returned value from called method");
-}
-
-
-- (NSString *)valueForTest:(NSInvocation *)originalInvocation
-{
-	return (id)originalInvocation;
-}
-
-- (void)testCallsMethodAndPassesOriginalInvocation
-{
-	[[[mock stub] andCall:@selector(valueForTest:) onObject:self] lowercaseString];
+	NSString *returnValue = [mock commonPrefixWithString:@"FOO" options:NSCaseInsensitiveSearch];
 	
-	NSInvocation *invocation = (id)[mock lowercaseString];
-	
-	STAssertEquals(@selector(lowercaseString), [invocation selector], @"Should have passed and returned invocation.");
+	STAssertEqualObjects(@"[FOO, 1]", returnValue, @"Should have passed and returned invocation.");
 }
+
 
 // --------------------------------------------------------------------------------------
 //	returning values in pass-by-reference arguments
@@ -456,6 +474,32 @@ static NSString *TestNotification = @"TestNotification";
 	[[mock expect] performSelector:@selector(lowercaseString)];
 	[mock performSelector:@selector(lowercaseString)];
 	[mock verify];
+}
+
+
+// --------------------------------------------------------------------------------------
+//	ordered expectations
+// --------------------------------------------------------------------------------------
+
+- (void)testAcceptsExpectedMethodsInRecordedSequenceWhenOrderMatters
+{
+	[mock setExpectationOrderMatters:YES];
+	
+	[[mock expect] lowercaseString];
+	[[mock expect] uppercaseString];
+	
+	STAssertNoThrow([mock lowercaseString], @"Should have accepted expected method in sequence.");
+	STAssertNoThrow([mock uppercaseString], @"Should have accepted expected method in sequence.");
+}
+
+- (void)testRaisesExceptionWhenSequenceIsWrongAndOrderMatters
+{
+	[mock setExpectationOrderMatters:YES];
+	
+	[[mock expect] lowercaseString];
+	[[mock expect] uppercaseString];
+	
+	STAssertThrows([mock uppercaseString], @"Should have complained about wrong sequence.");
 }
 
 
@@ -599,6 +643,19 @@ static NSString *TestNotification = @"TestNotification";
 	mock = [OCMockObject partialMockForObject:foo];
 	[[[mock stub] andCall:@selector(differentMethodInDifferentClass) onObject:self] method1];
 	STAssertEqualObjects(@"swizzled!", [foo method1], @"Should have returned value from different method");
+}
+
+
+- (void)aMethodWithVoidReturn
+{
+}
+
+- (void)testMethodSwizzlingWorksForVoidReturns
+{
+	TestClassThatCallsSelf *foo = [[[TestClassThatCallsSelf alloc] init] autorelease];
+	mock = [OCMockObject partialMockForObject:foo];
+	[[[mock stub] andCall:@selector(aMethodWithVoidReturn) onObject:self] method1];
+	STAssertNoThrow([foo method1], @"Should have worked.");
 }
 
 

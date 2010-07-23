@@ -1,10 +1,10 @@
 //---------------------------------------------------------------------------------------
-//  $Id$
+//  $Id: OCProtocolMockObject.m 52 2009-08-14 07:21:10Z erik $
 //  Copyright (c) 2005-2008 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
 #import <objc/runtime.h>
-#import "NSMethodSignature+Private.h"
+#import "NSMethodSignature+OCMAdditions.h"
 #import "OCProtocolMockObject.h"
 
 

@@ -1,8 +1,9 @@
 //---------------------------------------------------------------------------------------
-//  $Id$
+//  $Id: OCMIndirectReturnValueProvider.m 54 2009-08-18 06:27:36Z erik $
 //  Copyright (c) 2009 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
+#import "NSMethodSignature+OCMAdditions.h"
 #import "OCMIndirectReturnValueProvider.h"
 
 
@@ -10,7 +11,7 @@
 
 - (id)initWithProvider:(id)aProvider andSelector:(SEL)aSelector
 {
-	[super initWithValue:nil];
+	[super init];
 	provider = [aProvider retain];
 	selector = aSelector;
 	return self;
@@ -24,9 +25,9 @@
 
 - (void)handleInvocation:(NSInvocation *)anInvocation
 {
-	// TODO: Should check signature and only provide invocation when it matches first argument
-	returnValue = [[provider performSelector:selector withObject:anInvocation] retain];
-	[super handleInvocation:anInvocation];
+	[anInvocation setTarget:provider];
+	[anInvocation setSelector:selector];
+	[anInvocation invoke];
 }
 
 @end

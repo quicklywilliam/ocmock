@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------------
-//  $Id$
+//  $Id: OCMockObject.m 53 2009-08-14 07:37:55Z erik $
 //  Copyright (c) 2004-2009 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
@@ -39,10 +39,6 @@
 	return [[[OCPartialMockObject alloc] initWithObject:anObject] autorelease];
 }
 
-+ (void)forgetPartialMockForObject:(NSObject *)anObject
-{
-    [OCPartialMockObject forgetPartialMockForObject:anObject];
-}
 
 + (id)niceMockForClass:(Class)aClass
 {
@@ -73,8 +69,10 @@
 
 - (id)init
 {
+	// no [super init], we're inheriting from NSProxy
+	expectationOrderMatters = NO;
 	recorders = [[NSMutableArray alloc] init];
-	expectations = [[NSMutableSet alloc] init];
+	expectations = [[NSMutableArray alloc] init];
 	exceptions = [[NSMutableArray alloc] init];
 	return self;
 }
@@ -92,6 +90,11 @@
 	return @"OCMockObject";
 }
 
+
+- (void)setExpectationOrderMatters:(BOOL)flag
+{
+    expectationOrderMatters = flag;
+}
 
 
 #pragma mark  Public API
@@ -117,7 +120,7 @@
 	if([expectations count] == 1)
 	{
 		[NSException raise:NSInternalInconsistencyException format:@"%@: expected method was not invoked: %@", 
-			[self description], [[expectations anyObject] description]];
+			[self description], [[expectations objectAtIndex:0] description]];
 	}
 	if([expectations count] > 0)
 	{
@@ -157,6 +160,13 @@
 	
 	if([expectations containsObject:recorder])
 	{
+		if(expectationOrderMatters && ([expectations objectAtIndex:0] != recorder))
+		{
+			[NSException raise:NSInternalInconsistencyException	format:@"%@: unexpected method invoked: %@\n\texpected:\t%@",  
+			 [self description], [recorder description], [[expectations objectAtIndex:0] description]];
+			
+		}
+		[[recorder retain] autorelease];
 		[expectations removeObject:recorder];
 		[recorders removeObjectAtIndex:i];
 	}

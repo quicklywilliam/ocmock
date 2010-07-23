@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------------
-//  $Id$
+//  $Id: OCMockRecorder.m 55 2009-10-16 06:42:18Z erik $
 //  Copyright (c) 2004-2009 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
@@ -122,9 +122,17 @@
 	for(i = 2; i < n; i++)
 	{
 		recordedArg = [recordedInvocation getArgumentAtIndexAsObject:i];
+		passedArg = [anInvocation getArgumentAtIndexAsObject:i];
+
+		if([recordedArg isProxy])
+		{
+			if(![recordedArg isEqual:passedArg])
+				return NO;
+			continue;
+		}
+		
 		if([recordedArg isKindOfClass:[NSValue class]])
 			recordedArg = [OCMArg resolveSpecialValues:recordedArg];
-		passedArg = [anInvocation getArgumentAtIndexAsObject:i];
 		
 		if([recordedArg isKindOfClass:[OCMConstraint class]])
 		{	
