@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------------------------
 
 #import <OCMock/OCMock.h>
-#import "OCMockObjectTests.h"
+#import <OCMock/OCMockObjectTests.h>
 
 // --------------------------------------------------------------------------------------
 //	Helper classes and protocols for testing

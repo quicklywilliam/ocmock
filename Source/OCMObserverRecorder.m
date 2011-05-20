@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------------------------
 
 #import <objc/runtime.h>
-#import <OCMock/OCMConstraint.h>
+#import "OCMConstraint.h"
 #import "NSInvocation+OCMAdditions.h"
 #import "OCMObserverRecorder.h"
 

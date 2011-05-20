@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------------------------
 
 #import <OCMock/OCMock.h>
-#import "OCMockObjectHamcrestTests.h"
+#import <OCMock/OCMockObjectHamcrestTests.h>
 
 #define HC_SHORTHAND
 #import <OCHamcrest/OCHamcrest.h>

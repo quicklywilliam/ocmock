@@ -3,8 +3,8 @@
 //  Copyright (c) 2006-2008 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
-#import "NSInvocationOCMAdditionsTests.h"
-#import "NSInvocation+OCMAdditions.h"
+#import <OCMock/NSInvocationOCMAdditionsTests.h>
+#import <OCMock/NSInvocation+OCMAdditions.h>
 
 #define TestString @"foo"
 #define TestInt 1

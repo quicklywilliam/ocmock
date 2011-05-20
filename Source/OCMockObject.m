@@ -3,12 +3,12 @@
 //  Copyright (c) 2004-2009 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
-#import <OCMock/OCMockObject.h>
+#import "OCMockObject.h"
 #import "OCClassMockObject.h"
 #import "OCProtocolMockObject.h"
 #import "OCPartialMockObject.h"
 #import "OCObserverMockObject.h"
-#import <OCMock/OCMockRecorder.h>
+#import "OCMockRecorder.h"
 #import "NSInvocation+OCMAdditions.h"
 
 @interface OCMockObject(Private)

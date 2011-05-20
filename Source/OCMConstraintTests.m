@@ -3,7 +3,7 @@
 //  Copyright (c) 2004-2008 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
-#import "OCMConstraintTests.h"
+#import <OCMock/OCMConstraintTests.h>
 #import <OCMock/OCMConstraint.h>
 
 

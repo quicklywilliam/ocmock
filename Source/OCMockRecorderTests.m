@@ -3,10 +3,10 @@
 //  Copyright (c) 2004-2009 by Mulle Kybernetik. See License file for details.
 //---------------------------------------------------------------------------------------
 
-#import "OCMockRecorderTests.h"
+#import <OCMock/OCMockRecorderTests.h>
 #import <OCMock/OCMockRecorder.h>
-#import "OCMReturnValueProvider.h"
-#import "OCMExceptionReturnValueProvider.h"
+#import <OCMock/OCMReturnValueProvider.h>
+#import <OCMock/OCMExceptionReturnValueProvider.h>
 
 
 @implementation OCMockRecorderTests

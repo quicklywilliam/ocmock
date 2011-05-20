@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------------------------
 
 #import <OCMock/OCMock.h>
-#import "OCObserverMockObjectTest.h"
+#import <OCMock/OCObserverMockObjectTest.h>
 
 static NSString *TestNotificationOne = @"TestNotificationOne";
 

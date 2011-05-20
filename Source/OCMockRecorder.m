@@ -4,9 +4,9 @@
 //---------------------------------------------------------------------------------------
 
 #import <objc/runtime.h>
-#import <OCMock/OCMockRecorder.h>
-#import <OCMock/OCMArg.h>
-#import <OCMock/OCMConstraint.h>
+#import "OCMockRecorder.h"
+#import "OCMArg.h"
+#import "OCMConstraint.h"
 #import "OCMPassByRefSetter.h"
 #import "OCMReturnValueProvider.h"
 #import "OCMBoxedReturnValueProvider.h"
